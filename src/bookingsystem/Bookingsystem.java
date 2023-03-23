@@ -9,9 +9,10 @@ public class Bookingsystem {
        
     public static void main(String[] args) {
         int convert = 0;
+        int[] seatPlaces = new int[22];
         while(true){
             try{
-                System.out.println("MENU:");
+                System.out.println("\nMENU:");
                 System.out.println("{1] BOOK SEAT");
                 System.out.println("[2] AVAILABLE SEATS");
                 System.out.println("[3] PROFIT");
@@ -21,16 +22,17 @@ public class Bookingsystem {
                 convert = Integer.parseInt(userInput);
             }catch(Exception e){
                 System.out.println("INVALID INPUT");
+                continue;
             }
             switch(convert){
                 case 1:
-                    bookSeat();
+                    booking(seatPlaces);
                     continue;
                 case 2:
-                    availableSeat();
+                    availableSeat(seatPlaces);
                     continue;
                 case 3:
-                    profit();
+                    profit(seatPlaces);
                     continue;
                 case 4:
                     System.out.println("Exiting program...");
@@ -41,11 +43,62 @@ public class Bookingsystem {
             }           
         }
     }
+    static void booking(int [] seatPlaces){
+        while(true){
+            try{
+                System.out.println("\nBOOKING:");
+                System.out.println("[1] BOOK SEAT");
+                System.out.println("[2] FIND BOOKING");
+                System.out.println("[3] CANCEL BOOKING");
+                System.out.print("INPUT: ");
+                userInput = sc.nextLine();
+            }catch(Exception e){
+                System.out.println("INVALID INPUT");
+                continue;
+            }
+            if(userInput == "1"){
+                bookSeat(seatPlaces);
+            }else if(userInput == "2"){
+                findBooking(seatPlaces);
+            }else if(userInput == "3"){
+                cancelBooking(seatPlaces);
+            }else{
+                System.out.println("INVALID INPUT");
+                continue;
+            }      
+        }
+    }
     
-    static void bookSeat(){
-        int[] seatPlaces = new int[22];
-        int socialNumber = 0;
-        
+    static void bookSeat(int [] seatPlaces){
+        int socialNumber;
+        while(true){
+            try{
+                System.out.print("ENTER YOUR SOCIAL NUMBER [YYMMDD]: ");
+                socialNumber = sc.nextInt();
+            }catch(Exception e){
+                System.out.println("INVALID INPUT");
+                continue;
+            }
+            if(socialNumber < 000101 || socialNumber >991231){
+                System.out.println("INVALID INPUT");
+                continue;
+            }
+            break;
+        }
+        for(int i = 1;i < seatPlaces.length;i++){
+            if(seatPlaces[i] == 0){
+                seatPlaces[i] = socialNumber;
+                System.out.println("YOUR SEAT NUMBER IS: "+i);
+                break;
+            }
+        }
+        System.out.print("PRESS ENTER TO CONFIRM");
+        sc.nextLine();
+        sc.nextLine();
+    }
+    
+    static void findBooking(int [] seatPlaces){
+        int socialNumber;
         while(true){
             try{
                 System.out.print("ENTER YOUR SOCIAL NUMBER [YYMMDD]: ");
@@ -61,27 +114,74 @@ public class Bookingsystem {
             break;
         }
         
-        System.out.println(seatPlaces[1]);
         for(int i = 1;i < seatPlaces.length;i++){
-            
-            if(seatPlaces[i] == 0){
-                seatPlaces[i] = socialNumber;
-                System.out.println("YOUR SEAT NUMBER IS: "+i);
-                break;
+            if(seatPlaces[i] == socialNumber){
+                
             }
         }
-        System.out.print("PRESS ENTER TO RETURN");
-        sc.nextLine();
-        sc.nextLine();
+    }
+    
+    static void cancelBooking(int [] seatPlaces){
         
     }
     
-    static void availableSeat(){
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    static void availableSeat(int [] seatPlaces){
+        int availableSeats = 0;
+        for(int i = 1;i < seatPlaces.length;i++){
+            if(seatPlaces[i] == 0){
+                availableSeats++;
+            }
+        }
+        if(availableSeats == 0){
+            System.out.println("THE BUSS IS FULL");
+        }else{
+            System.out.println("AVAILABLE SEATS: "+availableSeats);
+        }
+        System.out.print("PRESS ENTER TO RETURN");
+        sc.nextLine();
     }
     
-    static void profit(){
-    
- }
+    static void profit(int [] seatPlaces){
+        int takenSeats = 0;
+        final double price = 299.90;
+        double profit = 0;
+        for(int i = 1; i < seatPlaces.length;i++){
+            if(seatPlaces[i] != 0){
+                takenSeats++;
+            }        
+        }
+        profit = price*takenSeats;
+        System.out.println("TOTAL PROFIT: "+profit+"kr");
+        System.out.print("PRESS ENTER TO PROCCED");
+        sc.nextLine();
+    }
     
 }
