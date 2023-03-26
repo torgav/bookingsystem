@@ -13,7 +13,7 @@ public class Bookingsystem {
         while(true){
             try{
                 System.out.println("\nMENU:");
-                System.out.println("{1] BOOK SEAT");
+                System.out.println("{1] BOOKING");
                 System.out.println("[2] AVAILABLE SEATS");
                 System.out.println("[3] PROFIT");
                 System.out.println("[4] END PROGRAM");
@@ -21,12 +21,12 @@ public class Bookingsystem {
                 userInput = sc.nextLine();
                 convert = Integer.parseInt(userInput);
             }catch(Exception e){
-                System.out.println("INVALID INPUT");
+                System.out.println("\nINVALID INPUT");
                 continue;
             }
             switch(convert){
                 case 1:
-                    booking(seatPlaces);
+                    seatPlaces =  booking(seatPlaces);
                     continue;
                 case 2:
                     availableSeat(seatPlaces);
@@ -38,49 +38,56 @@ public class Bookingsystem {
                     System.out.println("Exiting program...");
                     System.exit(0);
                 default:
-                    System.out.println("INAVLID INPUT");
+                    System.out.println("\nINAVLID INPUT");
                     continue;
             }           
         }
     }
-    static void booking(int [] seatPlaces){
+    
+    static int[] booking(int [] seatPlaces){
         while(true){
             try{
                 System.out.println("\nBOOKING:");
                 System.out.println("[1] BOOK SEAT");
                 System.out.println("[2] FIND BOOKING");
                 System.out.println("[3] CANCEL BOOKING");
+                System.out.println("[4] RETURN TO MENU");
                 System.out.print("INPUT: ");
                 userInput = sc.nextLine();
             }catch(Exception e){
-                System.out.println("INVALID INPUT");
+                System.out.println("\nINVALID INPUT");
                 continue;
             }
-            if(userInput == "1"){
-                bookSeat(seatPlaces);
-            }else if(userInput == "2"){
+            if(userInput.equals("1")){
+                seatPlaces = bookSeat(seatPlaces);
+            }else if(userInput.equals("2")){
                 findBooking(seatPlaces);
-            }else if(userInput == "3"){
-                cancelBooking(seatPlaces);
+            }else if(userInput.equals("3")){
+                seatPlaces = cancelBooking(seatPlaces);
+            }else if(userInput.equals("4")){
+                main(null);
             }else{
-                System.out.println("INVALID INPUT");
+                System.out.println("\nINVALID INPUT");
                 continue;
-            }      
+            } 
+            return seatPlaces;
         }
     }
     
-    static void bookSeat(int [] seatPlaces){
+    static int[] bookSeat(int [] seatPlaces){
         int socialNumber;
         while(true){
             try{
-                System.out.print("ENTER YOUR SOCIAL NUMBER [YYMMDD]: ");
+                System.out.print("\nENTER YOUR SOCIAL NUMBER [YYMMDD]: ");
                 socialNumber = sc.nextInt();
             }catch(Exception e){
-                System.out.println("INVALID INPUT");
+                System.out.println("\nINVALID INPUT");
+                sc.nextLine();
                 continue;
             }
             if(socialNumber < 000101 || socialNumber >991231){
-                System.out.println("INVALID INPUT");
+                System.out.println("\nINVALID INPUT");
+                sc.nextLine();
                 continue;
             }
             break;
@@ -95,20 +102,62 @@ public class Bookingsystem {
         System.out.print("PRESS ENTER TO CONFIRM");
         sc.nextLine();
         sc.nextLine();
+        return seatPlaces;
     }
     
     static void findBooking(int [] seatPlaces){
+        int age = 0;
+        int foundSeat = 0;
         int socialNumber;
         while(true){
             try{
-                System.out.print("ENTER YOUR SOCIAL NUMBER [YYMMDD]: ");
+                System.out.print("\nENTER YOUR SOCIAL NUMBER [YYMMDD]: ");
                 socialNumber = sc.nextInt();
+                System.out.println("ENTER YOUR AGE:");
+                
             }catch(Exception e){
-                System.out.println("INVALID INPUT");
+                System.out.println("\nINVALID INPUT");
+                sc.nextLine();
                 continue;
             }
             if(socialNumber < 000101 || socialNumber >991231){
-                System.out.println("INVALID INPUT");
+                System.out.println("\nINVALID INPUT");
+                sc.nextLine();
+                continue;
+            }
+            break;
+        }
+        for(int i = 1;i < seatPlaces.length;i++){
+            if(seatPlaces[i] == socialNumber){
+                foundSeat++;
+                System.out.println("BOOKED SEAT NUMBER: "+i);
+                break;
+            }
+        }
+        if(foundSeat == 0){
+            System.out.println("NO SEAT IS ASSOCIATED WITH GIVEN SOCIAL NUMBER");
+        }
+        System.out.print("\nPRESS ENTER TO CONFIRM");
+        sc.nextLine();
+        sc.nextLine();
+    }
+    
+    static int[] cancelBooking(int [] seatPlaces){
+        int foundSeat = 0;
+        int convert = 0;
+        int socialNumber;
+        while(true){
+            try{
+                System.out.print("\nENTER YOUR SOCIAL NUMBER [YYMMDD]: ");
+                socialNumber = sc.nextInt();
+            }catch(Exception e){
+                System.out.println("\nINVALID INPUT");
+                sc.nextLine();
+                continue;
+            }
+            if(socialNumber < 000101 || socialNumber >991231){
+                System.out.println("\nINVALID INPUT");
+                sc.nextLine();
                 continue;
             }
             break;
@@ -116,43 +165,44 @@ public class Bookingsystem {
         
         for(int i = 1;i < seatPlaces.length;i++){
             if(seatPlaces[i] == socialNumber){
-                
+                foundSeat++;
+                while(true){
+                    try{
+                        System.out.println("DO YOU WANT TO CANCEL YOUR SEAT?");
+                        System.out.println("[1] CONFIRM");
+                        System.out.println("[2] DECLINE");
+                        System.out.print("INPUT: ");
+                        sc.nextLine();
+                        userInput = sc.nextLine();
+                        convert = Integer.parseInt(userInput);
+                    }catch(Exception e){
+                        System.out.println("\nINAVLID INPUT");
+                        continue;
+                    } 
+                    
+                    switch (convert){
+                        case 1:
+                            System.out.println("YOUR SEAT HAS BEEN SUCCESFULLY CANCELD");
+                            seatPlaces[i] = 0;
+                            break;
+                        case 2:
+                            main(null);
+                        default:
+                            System.out.println("\nINAVLID INPUT");
+                            continue;
+                    }
+                break;
+                }   
             }
         }
+        if(foundSeat == 0){
+                System.out.println("NO SEAT IS ASSOCIATED WITH GIVEN SOCIAL NUMBER");
+            }
+        System.out.print("\nPRESS ENTER TO CONFIRM");
+        sc.nextLine();
+        return seatPlaces;
     }
-    
-    static void cancelBooking(int [] seatPlaces){
-        
-    }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+ 
     static void availableSeat(int [] seatPlaces){
         int availableSeats = 0;
         for(int i = 1;i < seatPlaces.length;i++){
