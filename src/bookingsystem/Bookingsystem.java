@@ -33,7 +33,6 @@ public class Bookingsystem {
                     System.exit(0);
                 default:
                     System.out.println("\nINAVLID INPUT");
-                    continue;
             }           
         }
     }
@@ -48,17 +47,10 @@ public class Bookingsystem {
             int input = inputControl();
             
             switch(input){
-                case 1:
-                    seatPlaces = bookSeat(seatPlaces);
-                    break;
-                case 2:
-                    findBooking(seatPlaces);
-                    break;
-                case 3:
-                    seatPlaces = cancelBooking(seatPlaces);
-                    break;
-                case 4:
-                    main(null);
+                case 1 -> seatPlaces = bookSeat(seatPlaces);
+                case 2 -> findBooking(seatPlaces);
+                case 3 -> seatPlaces = cancelBooking(seatPlaces);
+                case 4 -> main(null);
             }
             return seatPlaces;
         }
@@ -72,6 +64,9 @@ public class Bookingsystem {
                 System.out.println("YOUR SEAT NUMBER IS: "+i);
                 break;
             }
+        }
+        if(seatPlaces[21]!= 0){
+            
         }
         System.out.print("PRESS ENTER TO CONFIRM");
         sc.nextLine();
@@ -156,16 +151,19 @@ public class Bookingsystem {
     }
     
     static void profit(int [] seatPlaces){
-        int takenSeats = 0;
-        final double price = 299.90;
-        double profit = 0;
-        for(int i = 1; i < seatPlaces.length;i++){
-            if(seatPlaces[i] != 0){
-                takenSeats++;
-            }        
-        }
-        profit = price*takenSeats;
-        System.out.println("\nTOTAL PROFIT: "+profit+"kr");
+        final double youngPrice = 149.90;
+        final double normalPrice = 299.90;
+        final double seniorPrice = 199.90;
+        double totalProfit = 0;
+        
+        int [] passengersAge  = new int [3];
+        passengersAge = passengersAgesControl(seatPlaces);
+        double youngTotalProfit = (double) (youngPrice * passengersAge[0]);
+        double normalTotalProfit = (double) (normalPrice * passengersAge[1]);
+        double seniorTotalProfit = (double) (seniorPrice * passengersAge[2]);
+        totalProfit = youngTotalProfit+normalTotalProfit+seniorTotalProfit;
+        
+        System.out.println("\nTOTAL PROFIT: "+totalProfit+"kr");
         System.out.print("PRESS ENTER TO PROCCED");
         sc.nextLine();
     }
@@ -231,9 +229,28 @@ public class Bookingsystem {
         }
     }
     
-    static void ageVerification(){
-        int ageVerification = 2023;
-            
+    static int []passengersAgesControl(int [] seatPlaces){
+        //[0] = young people
+        //[1] = Adult people
+        //[2] = Old people
+        int[] ageArray = new int [3];
+        
+        for(int i = 1;i < seatPlaces.length;i++){
+            if(seatPlaces[i] != 0){
+                String socialNumber = Integer.toString(seatPlaces[i]);
+                String temp1 = socialNumber.substring(0, 4);
+                int birth = Integer.parseInt(temp1);
+                int age = 2023-birth;
+                if(age < 18){
+                    ageArray[0]++;
+                }else if(age >= 18 && age < 64){
+                    ageArray[1]++;
+                }else if(age >= 64){
+                    ageArray[2]++;
+                }
+            }
+        }
+        return ageArray;
     }
        
 }
