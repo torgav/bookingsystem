@@ -6,10 +6,10 @@ public class Bookingsystem {
     //GLOBAL VARIABLES
        static Scanner sc = new Scanner(System.in);
        static String userInput = "";
-      
+       
     public static void main(String[] args) {
-        int input = 0;
         int[] seatPlaces = new int[22];
+        int input = 0;
         while(true){
             System.out.println("\nMENU:");
             System.out.println("{1] BOOKING");
@@ -50,7 +50,8 @@ public class Bookingsystem {
                 case 1 -> seatPlaces = bookSeat(seatPlaces);
                 case 2 -> findBooking(seatPlaces);
                 case 3 -> seatPlaces = cancelBooking(seatPlaces);
-                case 4 -> main(null);
+                case 4 -> {
+                }
             }
             return seatPlaces;
         }
@@ -162,6 +163,8 @@ public class Bookingsystem {
         double normalTotalProfit = (double) (normalPrice * passengersAge[1]);
         double seniorTotalProfit = (double) (seniorPrice * passengersAge[2]);
         totalProfit = youngTotalProfit+normalTotalProfit+seniorTotalProfit;
+        totalProfit = Math.round(totalProfit * 100);
+        totalProfit /= 100;
         
         System.out.println("\nTOTAL PROFIT: "+totalProfit+"kr");
         System.out.print("PRESS ENTER TO PROCCED");
@@ -205,9 +208,9 @@ public class Bookingsystem {
             String temp3 = socialNumber.substring(6, 8);
 
             
-                year = Integer.parseInt(temp1);
-                month = Integer.parseInt(temp2);
-                day =  Integer.parseInt(temp3);
+            year = Integer.parseInt(temp1);
+            month = Integer.parseInt(temp2);
+            day =  Integer.parseInt(temp3);
             
             }catch(Exception e){
                 System.out.println("INVALID INPUT SOCIAL NUMBER");
@@ -251,6 +254,9 @@ public class Bookingsystem {
             }
         }
         return ageArray;
+    }       
+    
+    static void list(){
+        
     }
-       
 }
