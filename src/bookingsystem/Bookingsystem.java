@@ -76,19 +76,54 @@ public class Bookingsystem {
     }
     
     static int[] bookSeat(int [] seatPlaces){
+        int input = 0;
+        int seat = 0;
+        
         int socialNumber = socialNumberControl();
-        for(int i = 1;i < seatPlaces.length;i++){
-            if(seatPlaces[i] == 0){
-                seatPlaces[i] = socialNumber;
-                System.out.println("YOUR SEAT NUMBER IS: "+i);
+        System.out.println("\nBOOKING OPTIONS:");
+        System.out.println("[1] BOOK ANY AVAILABLE SEAT");
+        System.out.println("[2] BOOK A WINDOW SEAT");
+        input = inputControl();
+        
+        switch(input){
+            case 1:
+                for(int i = 1;i < seatPlaces.length;i++){
+                    if(seatPlaces[i] == 0){
+                        seatPlaces[i] = socialNumber;
+                        System.out.println("YOUR SEAT NUMBER IS: "+i);
+                        break;
+                    }
+                }
                 break;
-            }
-        }
-        if(seatPlaces[21]!= 0){
-            
+            case 2:
+                seatPlaces = bookWindowSeat(seatPlaces, socialNumber);
+                break;
         }
         System.out.print("PRESS ENTER TO CONFIRM");
         sc.nextLine();
+        return seatPlaces;
+    }
+    
+    static int[] bookWindowSeat(int[] seatPlaces, int socialNumber ){
+        int seat = 0;
+        int takenWindowSeats = 0;
+        
+        for(int i = 1; i < 6; i++){
+            takenWindowSeats++;
+            seat = 4*i - 3;
+            if(seatPlaces[seat] == 0){
+                seatPlaces[seat] = socialNumber;
+                System.out.println("YOUR SEAT NUMBER IS: "+seat);
+                break;
+            }
+            
+            seat = 4*i;
+            if(seatPlaces[seat] == 0){
+                seatPlaces[seat] = socialNumber;
+                System.out.println("YOUR SEAT NUMBER IS: "+seat);
+                break;
+            }
+        }
         return seatPlaces;
     }
     
