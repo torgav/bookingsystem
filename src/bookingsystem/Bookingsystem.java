@@ -14,7 +14,7 @@ public class Bookingsystem {
             System.out.println("\nMENU:");
             System.out.println("{1] BOOKING");
             System.out.println("[2] AVAILABLE SEATS");
-            System.out.println("[3] PROFIT");
+            System.out.println("[3] FUNCTIONS");
             System.out.println("[4] END PROGRAM");
             input = inputControl();
             
@@ -26,7 +26,7 @@ public class Bookingsystem {
                     availableSeat(seatPlaces);
                     continue;
                 case 3:
-                    profit(seatPlaces);
+                    functions(seatPlaces);
                     continue;
                 case 4:
                     System.out.println("Exiting program...");
@@ -51,6 +51,24 @@ public class Bookingsystem {
                 case 2 -> findBooking(seatPlaces);
                 case 3 -> seatPlaces = cancelBooking(seatPlaces);
                 case 4 -> {
+                }
+            }
+            return seatPlaces;
+        }
+    }
+    
+    static int[] functions(int [] seatPlaces){
+        while(true){
+            System.out.println("\nFUNCTIONS:");
+            System.out.println("[1] PROFIT");
+            System.out.println("[2] AGE LIST");
+            System.out.println("[3] RETURN TO MENU");
+            int input = inputControl();
+            
+            switch(input){
+                case 1 -> profit(seatPlaces);
+                case 2 -> list(seatPlaces);   
+                case 3 -> {
                 }
             }
             return seatPlaces;
@@ -158,7 +176,7 @@ public class Bookingsystem {
         double totalProfit = 0;
         
         int [] passengersAge  = new int [3];
-        passengersAge = passengersAgesControl(seatPlaces);
+        passengersAge = passengersAgeControl(seatPlaces);
         double youngTotalProfit = (double) (youngPrice * passengersAge[0]);
         double normalTotalProfit = (double) (normalPrice * passengersAge[1]);
         double seniorTotalProfit = (double) (seniorPrice * passengersAge[2]);
@@ -232,7 +250,7 @@ public class Bookingsystem {
         }
     }
     
-    static int []passengersAgesControl(int [] seatPlaces){
+    static int []passengersAgeControl(int [] seatPlaces){
         //[0] = young people
         //[1] = Adult people
         //[2] = Old people
@@ -256,7 +274,60 @@ public class Bookingsystem {
         return ageArray;
     }       
     
-    static void list(){
+    static void list(int [] seatPlaces){
+        int[] tempAgeList = seatPlaces;
+        int[] tempSeatList = new int [22];
         
+        for(int i = 1; i < tempAgeList.length; i++){
+            tempSeatList[i] = i;
+        }
+        
+        for (int i = 1; i < tempAgeList.length - 1; i++) {
+            for (int j = 0; j < tempAgeList.length - i - 1; j++) {
+                if (tempAgeList[j] > tempAgeList[j + 1]) {
+                    
+                    int temp = tempAgeList[j];
+                    tempAgeList[j] = tempAgeList[j + 1];
+                    tempAgeList[j + 1] = temp;
+
+                    
+                    temp = tempSeatList[j];
+                    tempSeatList[j] = tempSeatList[j + 1];
+                    tempSeatList[j + 1] = temp;
+                }
+            }
+        }
+        
+        //KOLLAR OM DE ÄR ÖVER 18
+        System.out.println("\nOVER 18:");
+        for(int i = 1; i < tempAgeList.length; i++){
+            if(tempAgeList[i] != 0){
+                String socialNumber = Integer.toString(seatPlaces[i]);
+                String temp1 = socialNumber.substring(0, 4);
+                int birth = Integer.parseInt(temp1);
+                int age = 2023-birth;
+                if(age >= 18){
+                    System.out.println("PRSNR: "+tempAgeList[i]+" SEAT: "+ tempSeatList[i]);
+                }
+            }
+        }
+        
+        //KOLLA OM DE ÄR UNDER 18
+        System.out.println("\nUNDER 18:");
+         for(int i = 1; i < tempAgeList.length; i++){
+             if(tempAgeList[i] != 0){
+                String socialNumber = Integer.toString(seatPlaces[i]);
+                String temp1 = socialNumber.substring(0, 4);
+                int birth = Integer.parseInt(temp1);
+                int age = 2023-birth;
+                if(age < 18){
+                    System.out.println("PRSNR: "+tempAgeList[i]+" SEAT: "+ tempSeatList[i]);
+                }
+            }
+         }
+         
+        System.out.print("\nPRESS ENTER TO RETURN");
+        sc.nextLine(); 
     }
 }
+ 
