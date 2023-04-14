@@ -9,7 +9,10 @@ public class Bookingsystem {
        
     public static void main(String[] args) {
         int[] seatPlaces = new int[22];
-        int input = 0;
+        String [] firstNameList = new String [22];
+        String [] lastNameList = new String [22];
+        
+        int input;
         while(true){
             System.out.println("\nMENU:");
             System.out.println("{1] BOOKING");
@@ -77,7 +80,6 @@ public class Bookingsystem {
     
     static int[] bookSeat(int [] seatPlaces){
         int input = 0;
-        int seat = 0;
         
         int socialNumber = socialNumberControl();
         System.out.println("\nBOOKING OPTIONS:");
@@ -97,7 +99,7 @@ public class Bookingsystem {
                 break;
             case 2:
                 seatPlaces = bookWindowSeat(seatPlaces, socialNumber);
-                break;
+                
         }
         System.out.print("PRESS ENTER TO CONFIRM");
         sc.nextLine();
@@ -232,7 +234,7 @@ public class Bookingsystem {
                 System.out.print("INPUT: ");
                 userInput = sc.nextLine();
                 convertVariable = Integer.parseInt(userInput);
-            }catch(Exception e){
+            }catch(NumberFormatException e){
                 System.out.println("\nINVALID INPUT");
                 continue;
             }
@@ -265,7 +267,7 @@ public class Bookingsystem {
             month = Integer.parseInt(temp2);
             day =  Integer.parseInt(temp3);
             
-            }catch(Exception e){
+            }catch(NumberFormatException e){
                 System.out.println("INVALID INPUT SOCIAL NUMBER");
                 continue;
             }
@@ -310,9 +312,12 @@ public class Bookingsystem {
     }       
     
     static void list(int [] seatPlaces){
-        int[] tempAgeList = seatPlaces;
-        int[] tempSeatList = new int [22];
+        int[] tempAgeList = new int [22];
+        for(int i = 1; i < seatPlaces.length; i++){
+            tempAgeList[i] = seatPlaces[i];
+        }
         
+        int[] tempSeatList = new int [22];
         for(int i = 1; i < tempAgeList.length; i++){
             tempSeatList[i] = i;
         }
@@ -324,7 +329,6 @@ public class Bookingsystem {
                     int temp = tempAgeList[j];
                     tempAgeList[j] = tempAgeList[j + 1];
                     tempAgeList[j + 1] = temp;
-
                     
                     temp = tempSeatList[j];
                     tempSeatList[j] = tempSeatList[j + 1];
@@ -337,7 +341,7 @@ public class Bookingsystem {
         System.out.println("\nOVER 18:");
         for(int i = 1; i < tempAgeList.length; i++){
             if(tempAgeList[i] != 0){
-                String socialNumber = Integer.toString(seatPlaces[i]);
+                String socialNumber = Integer.toString(tempAgeList[i]);
                 String temp1 = socialNumber.substring(0, 4);
                 int birth = Integer.parseInt(temp1);
                 int age = 2023-birth;
@@ -351,7 +355,7 @@ public class Bookingsystem {
         System.out.println("\nUNDER 18:");
          for(int i = 1; i < tempAgeList.length; i++){
              if(tempAgeList[i] != 0){
-                String socialNumber = Integer.toString(seatPlaces[i]);
+                String socialNumber = Integer.toString(tempAgeList[i]);
                 String temp1 = socialNumber.substring(0, 4);
                 int birth = Integer.parseInt(temp1);
                 int age = 2023-birth;
@@ -364,5 +368,6 @@ public class Bookingsystem {
         System.out.print("\nPRESS ENTER TO RETURN");
         sc.nextLine(); 
     }
+        
 }
  
