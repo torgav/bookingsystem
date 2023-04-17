@@ -9,6 +9,7 @@ public class Bookingsystem {
        
     public static void main(String[] args) {
         int[] seatPlaces = new int[22];
+        int choices = 4;
         String [] firstNameList = new String [22];
         String [] lastNameList = new String [22];
         
@@ -19,7 +20,7 @@ public class Bookingsystem {
             System.out.println("[2] AVAILABLE SEATS");
             System.out.println("[3] FUNCTIONS");
             System.out.println("[4] END PROGRAM");
-            input = inputControl();
+            input = inputControl(choices);
             
             switch(input){
                 case 1:
@@ -41,13 +42,14 @@ public class Bookingsystem {
     }
     
     static int[] booking(int [] seatPlaces){
+        int choices = 4;
         while(true){
             System.out.println("\nBOOKING:");
             System.out.println("[1] BOOK SEAT");
             System.out.println("[2] FIND BOOKING");
             System.out.println("[3] CANCEL BOOKING");
             System.out.println("[4] RETURN TO MENU");
-            int input = inputControl();
+            int input = inputControl(choices);
             
             switch(input){
                 case 1 -> seatPlaces = bookSeat(seatPlaces);
@@ -61,12 +63,13 @@ public class Bookingsystem {
     }
     
     static int[] functions(int [] seatPlaces){
+        int choices = 3;
         while(true){
             System.out.println("\nFUNCTIONS:");
             System.out.println("[1] PROFIT");
             System.out.println("[2] AGE LIST");
             System.out.println("[3] RETURN TO MENU");
-            int input = inputControl();
+            int input = inputControl(choices);
             
             switch(input){
                 case 1 -> profit(seatPlaces);
@@ -80,12 +83,13 @@ public class Bookingsystem {
     
     static int[] bookSeat(int [] seatPlaces){
         int input = 0;
+        int choices = 2;
         
         int socialNumber = socialNumberControl();
         System.out.println("\nBOOKING OPTIONS:");
         System.out.println("[1] BOOK ANY AVAILABLE SEAT");
         System.out.println("[2] BOOK A WINDOW SEAT");
-        input = inputControl();
+        input = inputControl(choices);
         
         switch(input){
             case 1:
@@ -144,6 +148,7 @@ public class Bookingsystem {
         }
         System.out.print("\nPRESS ENTER TO CONFIRM");
         sc.nextLine();
+        sc.nextLine();
     }
     
     static int[] cancelBooking(int [] seatPlaces){
@@ -159,6 +164,7 @@ public class Bookingsystem {
                         System.out.println("[1] CONFIRM");
                         System.out.println("[2] DECLINE");
                         System.out.print("INPUT: ");
+                        sc.nextLine();
                         userInput = sc.nextLine();
                         convert = Integer.parseInt(userInput);
                     }catch(Exception e){
@@ -226,7 +232,7 @@ public class Bookingsystem {
         sc.nextLine();
     }
     
-    static int inputControl(){
+    static int inputControl(int choices){
         int input;
         int convertVariable;
         while(true){
@@ -238,7 +244,7 @@ public class Bookingsystem {
                 System.out.println("\nINVALID INPUT");
                 continue;
             }
-            if(convertVariable > 4){
+            if(convertVariable > choices){
                 System.out.println("\nINVALID INPUT");
                 continue;
             }
@@ -251,12 +257,14 @@ public class Bookingsystem {
         int year;
         int month;
         int day;
+        int input = 0;
         String socialNumber = "";
         
         while(true){
             try{
             System.out.print("\nENTER YOUR SOCIAL NUMBER [YYYYMMDD]: ");
-            socialNumber = sc.nextLine();
+            input = sc.nextInt();
+            socialNumber = Integer.toString(input);
             
             String temp1 = socialNumber.substring(0, 4);
             String temp2 = socialNumber.substring(4, 6);
@@ -267,8 +275,9 @@ public class Bookingsystem {
             month = Integer.parseInt(temp2);
             day =  Integer.parseInt(temp3);
             
-            }catch(NumberFormatException e){
+            }catch(Exception e){
                 System.out.println("INVALID INPUT SOCIAL NUMBER");
+                sc.nextLine();
                 continue;
             }
 
@@ -313,6 +322,8 @@ public class Bookingsystem {
     
     static void list(int [] seatPlaces){
         int[] tempAgeList = new int [22];
+        int found = 0;
+        
         for(int i = 1; i < seatPlaces.length; i++){
             tempAgeList[i] = seatPlaces[i];
         }
@@ -341,6 +352,7 @@ public class Bookingsystem {
         System.out.println("\nOVER 18:");
         for(int i = 1; i < tempAgeList.length; i++){
             if(tempAgeList[i] != 0){
+                found++;
                 String socialNumber = Integer.toString(tempAgeList[i]);
                 String temp1 = socialNumber.substring(0, 4);
                 int birth = Integer.parseInt(temp1);
@@ -350,24 +362,43 @@ public class Bookingsystem {
                 }
             }
         }
+        if(found == 0){
+            System.out.println("NO DATA");
+        }
         
         //KOLLA OM DE ÄR UNDER 18
+        found = 0;
         System.out.println("\nUNDER 18:");
-         for(int i = 1; i < tempAgeList.length; i++){
-             if(tempAgeList[i] != 0){
-                String socialNumber = Integer.toString(tempAgeList[i]);
-                String temp1 = socialNumber.substring(0, 4);
-                int birth = Integer.parseInt(temp1);
-                int age = 2023-birth;
-                if(age < 18){
-                    System.out.println("PRSNR: "+tempAgeList[i]+" SEAT: "+ tempSeatList[i]);
-                }
+        
+        for(int i = 1; i < tempAgeList.length; i++){
+            if(tempAgeList[i] != 0){
+                found++;
+               String socialNumber = Integer.toString(tempAgeList[i]);
+               String temp1 = socialNumber.substring(0, 4);
+               int birth = Integer.parseInt(temp1);
+               int age = 2023-birth;
+               if(age < 18){
+                   System.out.println("PRSNR: "+tempAgeList[i]+" SEAT: "+ tempSeatList[i]);
+               }
             }
-         }
+        }
+        if(found == 0){
+            System.out.println("NO DATA");
+        }
          
         System.out.print("\nPRESS ENTER TO RETURN");
         sc.nextLine(); 
     }
+    /*
+    static void socialInformation(){
+        System.out.println("FIRST NAME:");
+        String firstName = sc.nextLine();
+        System.out.println("LAST NAME:");
+        String lastName = sc.nextLine();
+        System.out.println("GENDER:");
+        String gender = sc.nextLine();
+    }
+    */
         
 }
  
