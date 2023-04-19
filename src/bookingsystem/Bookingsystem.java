@@ -6,9 +6,9 @@ public class Bookingsystem {
     //GLOBAL VARIABLES
        static Scanner sc = new Scanner(System.in);
        static String userInput = "";
+       static int[] seatPlaces = new int[22];
        
     public static void main(String[] args) {
-        int[] seatPlaces = new int[22];
         int choices = 4;
         String [] firstNameList = new String [22];
         String [] lastNameList = new String [22];
@@ -24,13 +24,13 @@ public class Bookingsystem {
             
             switch(input){
                 case 1:
-                    seatPlaces =  booking(seatPlaces);
+                    booking();
                     continue;
                 case 2:
-                    availableSeat(seatPlaces);
+                    availableSeat();
                     continue;
                 case 3:
-                    functions(seatPlaces);
+                    functions();
                     continue;
                 case 4:
                     System.out.println("Exiting program...");
@@ -41,7 +41,7 @@ public class Bookingsystem {
         }
     }
     
-    static int[] booking(int [] seatPlaces){
+    static int[] booking(){
         int choices = 4;
         while(true){
             System.out.println("\nBOOKING:");
@@ -52,9 +52,9 @@ public class Bookingsystem {
             int input = inputControl(choices);
             
             switch(input){
-                case 1 -> seatPlaces = bookSeat(seatPlaces);
-                case 2 -> findBooking(seatPlaces);
-                case 3 -> seatPlaces = cancelBooking(seatPlaces);
+                case 1 -> bookSeat();
+                case 2 -> findBooking();
+                case 3 -> cancelBooking();
                 case 4 -> {
                 }
             }
@@ -62,7 +62,7 @@ public class Bookingsystem {
         }
     }
     
-    static int[] functions(int [] seatPlaces){
+    static void functions(){
         int choices = 3;
         while(true){
             System.out.println("\nFUNCTIONS:");
@@ -72,16 +72,16 @@ public class Bookingsystem {
             int input = inputControl(choices);
             
             switch(input){
-                case 1 -> profit(seatPlaces);
-                case 2 -> list(seatPlaces);   
+                case 1 -> profit();
+                case 2 -> list();   
                 case 3 -> {
                 }
             }
-            return seatPlaces;
+            break;
         }
     }
     
-    static int[] bookSeat(int [] seatPlaces){
+    static void bookSeat(){
         int input = 0;
         int choices = 2;
         
@@ -89,6 +89,7 @@ public class Bookingsystem {
         System.out.println("\nBOOKING OPTIONS:");
         System.out.println("[1] BOOK ANY AVAILABLE SEAT");
         System.out.println("[2] BOOK A WINDOW SEAT");
+        sc.nextLine();
         input = inputControl(choices);
         
         switch(input){
@@ -102,15 +103,14 @@ public class Bookingsystem {
                 }
                 break;
             case 2:
-                seatPlaces = bookWindowSeat(seatPlaces, socialNumber);
+                bookWindowSeat(socialNumber);
                 
         }
         System.out.print("PRESS ENTER TO CONFIRM");
         sc.nextLine();
-        return seatPlaces;
     }
     
-    static int[] bookWindowSeat(int[] seatPlaces, int socialNumber ){
+    static void bookWindowSeat(int socialNumber ){
         int seat = 0;
         int takenWindowSeats = 0;
         
@@ -130,10 +130,9 @@ public class Bookingsystem {
                 break;
             }
         }
-        return seatPlaces;
     }
     
-    static void findBooking(int [] seatPlaces){
+    static void findBooking(){
         int foundSeat = 0;
         int socialNumber;
         socialNumber = socialNumberControl();
@@ -151,7 +150,7 @@ public class Bookingsystem {
         sc.nextLine();
     }
     
-    static int[] cancelBooking(int [] seatPlaces){
+    static void cancelBooking(){
         int foundSeat = 0;
         int convert = 0;
         int socialNumber = socialNumberControl();
@@ -193,10 +192,9 @@ public class Bookingsystem {
             }
         System.out.print("\nPRESS ENTER TO CONFIRM");
         sc.nextLine();
-        return seatPlaces;
     }
  
-    static void availableSeat(int [] seatPlaces){
+    static void availableSeat(){
         int availableSeats = 0;
         for(int i = 1;i < seatPlaces.length;i++){
             if(seatPlaces[i] == 0){
@@ -212,7 +210,7 @@ public class Bookingsystem {
         sc.nextLine();
     }
     
-    static void profit(int [] seatPlaces){
+    static void profit(){
         final double youngPrice = 149.90;
         final double normalPrice = 299.90;
         final double seniorPrice = 199.90;
@@ -320,7 +318,7 @@ public class Bookingsystem {
         return ageArray;
     }       
     
-    static void list(int [] seatPlaces){
+    static void list(){
         int[] tempAgeList = new int [22];
         int found = 0;
         
