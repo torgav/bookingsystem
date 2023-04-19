@@ -62,18 +62,20 @@ public class Bookingsystem {
     }
     
     static void functions(){
-        int choices = 3;
+        int choices = 4;
         while(true){
             System.out.println("\nFUNCTIONS:");
             System.out.println("[1] PROFIT");
             System.out.println("[2] AGE LIST");
-            System.out.println("[3] RETURN TO MENU");
+            System.out.println("[3] SORTED LIST");
+            System.out.println("[4] RETURN TO MENU");
             int input = inputControl(choices);
             
             switch(input){
                 case 1 -> profit();
-                case 2 -> list();   
-                case 3 -> {
+                case 2 -> list(); 
+                case 3 -> sortedList(); 
+                case 4 -> {
                 }
             }
             break;
@@ -106,19 +108,20 @@ public class Bookingsystem {
                     if(seatPlaces[i] == 0){
                         seatPlaces[i] = socialNumber;
                         firstNameList[i] = firstName;
+                        lastNameList[i] = lastName;
                         System.out.println("YOUR SEAT NUMBER IS: "+i);
                         break;
                     }
                 }
                 break;
             case 2:
-                bookWindowSeat(socialNumber, firstName);     
+                bookWindowSeat(socialNumber, firstName, lastName);     
         }
         System.out.print("PRESS ENTER TO RETURN");
         sc.nextLine();
     }
     
-    static void bookWindowSeat(int socialNumber, String firstName){
+    static void bookWindowSeat(int socialNumber, String firstName, String lastName){
         int seat = 0;
         int takenWindowSeats = 0;
         
@@ -128,6 +131,7 @@ public class Bookingsystem {
             if(seatPlaces[seat] == 0){
                 seatPlaces[seat] = socialNumber;
                 firstNameList[seat] = firstName;
+                lastNameList[seat] = lastName;
                 System.out.println("YOUR SEAT NUMBER IS: "+seat);
                 break;
             }
@@ -136,6 +140,7 @@ public class Bookingsystem {
             if(seatPlaces[seat] == 0){
                 seatPlaces[seat] = socialNumber;
                 firstNameList[seat] = firstName;
+                lastNameList[seat] = lastName;
                 System.out.println("YOUR SEAT NUMBER IS: "+seat);
                 break;
             }
@@ -371,13 +376,13 @@ public class Bookingsystem {
     
     static void list(){
         int[] tempAgeList = new int [22];
+        int[] tempSeatList = new int [22];
         int found = 0;
         
         for(int i = 1; i < seatPlaces.length; i++){
             tempAgeList[i] = seatPlaces[i];
         }
         
-        int[] tempSeatList = new int [22];
         for(int i = 1; i < tempAgeList.length; i++){
             tempSeatList[i] = i;
         }
@@ -438,16 +443,59 @@ public class Bookingsystem {
         System.out.print("\nPRESS ENTER TO RETURN");
         sc.nextLine(); 
     }
-    /*
-    static void socialInformation(){
-        System.out.println("FIRST NAME:");
-        String firstName = sc.nextLine();
-        System.out.println("LAST NAME:");
-        String lastName = sc.nextLine();
-        System.out.println("GENDER:");
-        String gender = sc.nextLine();
-    }
-    */
+    
+    static void sortedList(){
+        int[] tempSeatList = new int [22];
+        int[] tempAgeList = new int [22];
+        String [] tempFirstNameList = new String [22];
+        String [] tempLastNameList = new String [22];
+        int found = 0;
         
+        for(int i = 1; i < seatPlaces.length; i++){
+            tempAgeList[i] = seatPlaces[i];
+            tempFirstNameList[i] = firstNameList[i];
+            tempLastNameList[i] = lastNameList[i];
+        }
+        
+        for(int i = 1; i < tempAgeList.length; i++){
+            tempSeatList[i] = i;
+        }
+        
+        for (int i = 1; i < tempAgeList.length - 1; i++) {
+            for (int j = 0; j < tempAgeList.length - i - 1; j++) {
+                if (tempAgeList[j] > tempAgeList[j + 1]) {
+                    
+                    int temp = tempAgeList[j];
+                    tempAgeList[j] = tempAgeList[j + 1];
+                    tempAgeList[j + 1] = temp;
+                    
+                    temp = tempSeatList[j];
+                    tempSeatList[j] = tempSeatList[j + 1];
+                    tempSeatList[j + 1] = temp;
+                    
+                    String textTemp = tempFirstNameList[j];
+                    tempFirstNameList[j] = tempFirstNameList[j + 1];
+                    tempFirstNameList[j + 1] = textTemp;
+                    
+                    textTemp = tempLastNameList[j];
+                    tempLastNameList[j] = tempLastNameList[j + 1];
+                    tempLastNameList[j + 1] = textTemp;
+                }
+            }
+        }
+        System.out.println("\nSORTED LIST:");
+        for(int i = 1; i < 22; i++){
+            if(tempAgeList[i] != 0){
+                found++;
+                System.out.println(tempFirstNameList[i]+ " "+ tempLastNameList[i]+ " "+tempAgeList[i]+ " Seat: "+ tempSeatList[i]);
+            }
+        }
+        if(found == 0){
+            System.out.println("NO DATA");
+        }
+         
+        System.out.print("\nPRESS ENTER TO RETURN");
+        sc.nextLine(); 
+    }
 }
  
