@@ -72,11 +72,18 @@ public class Bookingsystem {
             int input = inputControl(choices);
             
             switch(input){
-                case 1 -> profit();
-                case 2 -> list(); 
-                case 3 -> sortedList(); 
-                case 4 -> {
-                }
+                case 1:
+                    System.out.println("\nPROFIT: "+profit(0)+" KR");
+                    System.out.print("PRESS ENTER TO RETURN");
+                    sc.nextLine();
+                    break;
+               
+                case 2:
+                    list(); 
+                    break;
+                case 3:
+                    sortedList();
+                    break;
             }
             break;
         }
@@ -85,11 +92,17 @@ public class Bookingsystem {
     static void bookSeat(){
         int input = 0;
         int choices = 2;
-        
-        System.out.print("\nENTER YOUR SOCIAL NUMBER [YYYYMMDD]: ");
-        input = sc.nextInt();
-        int socialNumber = socialInformationControl(input);
-        sc.nextLine();
+        int socialNumber = 0;
+        while(true){
+            System.out.print("\nENTER YOUR SOCIAL NUMBER [YYYYMMDD]: ");
+            userInput = sc.nextLine();
+            socialNumber = socialInformationControl(userInput);
+            if(socialNumber == -1){
+                continue;
+            }else{  
+                break;
+            }
+        }
         System.out.print("FIRST NAME: ");
         String firstName = sc.nextLine();
         System.out.print("LAST NAME: ");
@@ -151,10 +164,17 @@ public class Bookingsystem {
         int foundSeat = 0;
         while(true){
             try{
-                System.out.print("\nENTER NAME OR SOCIAL NUMBER OF THE BOOKING: ");
-                userInput = sc.nextLine();
-                int inputType = Integer.parseInt(userInput);
-                int socialNumber = socialInformationControl(inputType);
+                int socialNumber = 0;
+                while(true){
+                    System.out.print("\nENTER NAME OR SOCIAL NUMBER OF THE BOOKING: ");
+                    userInput = sc.nextLine();
+                    socialNumber = socialInformationControl(userInput);
+                    if(socialNumber == -1){
+                        continue;
+                    }else{
+                        break;
+                    }
+                }
 
                 for(int i = 1; i < seatPlaces.length;i++){
                     if(seatPlaces[i] == socialNumber){
@@ -163,7 +183,8 @@ public class Bookingsystem {
                     }
                 }
                 if(foundSeat == 0){
-                System.out.println("NO SEAT IS ASSOCIATED WITH GIVEN SOCIAL NUMBER");
+                System.out.println("NO SEAT IS ASSOCIATED WITH GIVEN SOCIAL INFORMTION");
+                break;
                 }   
             }catch(Exception e){
                 for(int i = 1; i < firstNameList.length;i++){
@@ -174,6 +195,7 @@ public class Bookingsystem {
                 }
                 if(foundSeat == 0){
                 System.out.println("NO SEAT IS ASSOCIATED WITH GIVEN NAME");
+                break;
                 }   
             }
             break;
@@ -196,8 +218,7 @@ public class Bookingsystem {
             try{
                 System.out.print("\nENTER NAME OR SOCIAL NUMBER OF THE BOOKING: ");
                 userInput = sc.nextLine();
-                int inputType = Integer.parseInt(userInput);
-                int socialNumber = socialInformationControl(inputType);
+                int socialNumber = socialInformationControl(userInput);
                 for(int i = 1;i < seatPlaces.length;i++){
                     if(seatPlaces[i] == socialNumber){
                         foundSeat++;
@@ -269,24 +290,34 @@ public class Bookingsystem {
         sc.nextLine();
     }
     
-    static void profit(){
-        final double youngPrice = 149.90;
-        final double normalPrice = 299.90;
-        final double seniorPrice = 199.90;
-        double totalProfit = 0;
+    static double profit(int index){
+        final double youngProfit = 149.90;
+        final double adultProfit = 299.90;
+        final double seniorProfit = 199.90;
+        double profit = 1;
         
-        int [] passengersAge  = new int [3];
-        passengersAge = passengersAgeControl();
-        double youngTotalProfit = (double) (youngPrice * passengersAge[0]);
-        double normalTotalProfit = (double) (normalPrice * passengersAge[1]);
-        double seniorTotalProfit = (double) (seniorPrice * passengersAge[2]);
-        totalProfit = youngTotalProfit+normalTotalProfit+seniorTotalProfit;
-        totalProfit = Math.round(totalProfit * 100);
-        totalProfit /= 100;
+        if(index == 21){
+            return 0;
+        }
         
-        System.out.println("\nTOTAL PROFIT: "+totalProfit+"kr");
-        System.out.print("PRESS ENTER TO RETURN");
-        sc.nextLine();
+        int age = seatPlaces[index];
+        if(age == 0){
+            return 0 + profit(index + 1);
+        }
+        
+        String tempYear = Integer.toString(age).substring(0, 4);
+        int year = Integer.parseInt(tempYear);
+        year = 2023 - year;
+
+        if(year < 18){
+           profit =  profit * youngProfit;
+        }else if(year > 17 && year < 65 ){
+            profit =  profit * adultProfit;
+        }else if(year < 64){
+             profit =  profit * seniorProfit;
+        }
+        
+        return profit + profit(index + 1);
     }
     
     static int inputControl(int choices){
@@ -310,19 +341,17 @@ public class Bookingsystem {
         }
     }
     
-    static int socialInformationControl(int input){
+    static int socialInformationControl(String input){
         int year;
         int month;
         int day;
-        String socialNumber = "";
+        int convertVariable = -1;
         
         while(true){
             try{
-            socialNumber = Integer.toString(input);
-            
-            String temp1 = socialNumber.substring(0, 4);
-            String temp2 = socialNumber.substring(4, 6);
-            String temp3 = socialNumber.substring(6, 8);
+            String temp1 = input.substring(0, 4);
+            String temp2 = input.substring(4, 6);
+            String temp3 = input.substring(6, 8);
 
             
             year = Integer.parseInt(temp1);
@@ -330,49 +359,24 @@ public class Bookingsystem {
             day =  Integer.parseInt(temp3);
             
             }catch(Exception e){
-                System.out.println("INVALID INPUT SOCIAL NUMBER");
-                sc.nextLine();
-                continue;
+                System.out.println("INVALID INPUT");
+                return convertVariable;
             }
 
             if(month > 12 ){
-                System.out.println("INVALID INPUT SOCIAL NUMBER");
-                continue;
+                System.out.println("INVALID INPUT");
+                return convertVariable;
             }else if(day > 31){
-                System.out.println("INVALID INPUT SOCIAL NUMBER");
-                continue;
+                System.out.println("INVALID INPUT");
+                return convertVariable;
             }else if(year > 2023){
-                System.out.println("INVALID INPUT SOCIAL NUMBER");
-                continue;
+                System.out.println("INVALID INPUT");
+                return convertVariable;            
             }
-            int convert = Integer.parseInt(socialNumber);
-            return convert;
+            convertVariable = Integer.parseInt(input);
+            return convertVariable;
         }
     }
-    
-    static int []passengersAgeControl(){
-        //[0] = young people
-        //[1] = Adult people
-        //[2] = Old people
-        int[] ageArray = new int [3];
-        
-        for(int i = 1;i < seatPlaces.length;i++){
-            if(seatPlaces[i] != 0){
-                String socialNumber = Integer.toString(seatPlaces[i]);
-                String temp1 = socialNumber.substring(0, 4);
-                int birth = Integer.parseInt(temp1);
-                int age = 2023-birth;
-                if(age < 18){
-                    ageArray[0]++;
-                }else if(age >= 18 && age < 64){
-                    ageArray[1]++;
-                }else if(age >= 64){
-                    ageArray[2]++;
-                }
-            }
-        }
-        return ageArray;
-    }       
     
     static void list(){
         int[] tempAgeList = new int [22];
