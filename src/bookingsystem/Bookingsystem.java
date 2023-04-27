@@ -622,6 +622,7 @@ public class Bookingsystem {
 
         // Be användaren trycka på Enter för att återgå.
         System.out.print("\nPRESS ENTER TO RETURN");
+        sc.nextLine();
     }
 }
  
