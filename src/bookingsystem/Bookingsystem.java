@@ -226,13 +226,17 @@ public class Bookingsystem {
             }
             
             seat = 4*i;
-            if(seatPlaces[seat] == 0){
-                foundSeat++;
-                seatPlaces[seat] = socialNumber;
-                firstNameList[seat] = firstName;
-                lastNameList[seat] = lastName;
-                System.out.println("YOUR SEAT NUMBER IS: "+seat);
-                break;
+            //Skippar 20 platsen för att den är inte en fönster plats
+            if(seat == 20){   
+            }else{
+                if(seatPlaces[seat] == 0){
+                    foundSeat++;
+                    seatPlaces[seat] = socialNumber;
+                    firstNameList[seat] = firstName;
+                    lastNameList[seat] = lastName;
+                    System.out.println("YOUR SEAT NUMBER IS: "+seat);
+                    break;
+                }
             }
         }
         if(foundSeat == 0){
